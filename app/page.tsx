@@ -106,13 +106,45 @@ export default function Home() {
   }, [isRunning, totalWordsCount]);
 
   return (
-    <section className="py-10 w-screen min-h-screen flex flex-col items-center bg-[#fff3] gap-6">
-      <p className="flex items-center justify-between text-2xl bg-[#fff3] w-full text-right p-2">
-        <span>{(elapsedTime / 1000).toFixed(1)} sec</span>
-        <span>{readingSpeed} wpm</span>
-      </p>
+    <section className="relative w-screen min-h-screen flex flex-col items-center justify-between bg-[#fff2]">
+      <div className="sticky top-0 z-10 bg-[#000] w-full p-2">
+        <p className="flex items-center justify-between text-2xl bg-[#fff3] w-full p-2">
+          {isRunning || elapsedTime > 0 ? (
+            <React.Fragment>
+              <span>{(elapsedTime / 1000).toFixed(1)} sec</span>
+              <span>{readingSpeed} wpm</span>
+            </React.Fragment>
+          ) : (
+            <span className="w-full text-center text-lg">
+              Tap the current word every few seconds;
+            </span>
+          )}
+        </p>
+      </div>
 
-      <div className="w-full flex items-center gap-2">
+      <article
+        className={`h-screen p-4 text-justify text-2xl transition-opacity duration-100 ${
+          isRunning
+            ? "bg-none opacity-100 blur-none"
+            : "bg-[#000] opacity-50 blur-sm"
+        }`}
+      >
+        {words.map((word, index) => (
+          <React.Fragment key={index}>
+            <span
+              ref={(ele) => {
+                wordRefs.current[index] = ele;
+              }}
+              onClick={() => handleWordClick(word, index)}
+              className="rounded active:bg-[#fff] active:transition-colors duration-1000"
+            >
+              {word}
+            </span>{" "}
+          </React.Fragment>
+        ))}
+      </article>
+
+      <div className="sticky bottom-0 z-10 bg-[#000] w-full flex items-center gap-2 p-2">
         <button
           onClick={() => handleStartBtn()}
           disabled={isRunning}
@@ -128,26 +160,6 @@ export default function Home() {
           RESET
         </button>
       </div>
-
-      <article
-        className={`bg-[#fff3] p-4 text-justify text-2xl transition-opacity duration-100 opacity-50 blur-sm${
-          isRunning ? " opacity-100 blur-none" : ""
-        }`}
-      >
-        {words.map((word, index) => (
-          <React.Fragment key={index}>
-            <span
-              ref={(ele) => {
-                wordRefs.current[index] = ele;
-              }}
-              onClick={() => handleWordClick(word, index)}
-              className="rounded active:bg-[#fff9] active:transition-colors duration-1000"
-            >
-              {word}
-            </span>{" "}
-          </React.Fragment>
-        ))}
-      </article>
     </section>
   );
 }
