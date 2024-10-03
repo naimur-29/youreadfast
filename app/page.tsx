@@ -122,13 +122,13 @@ export default function Home() {
     let intervalId2: NodeJS.Timeout | null = null;
 
     const simulateRandomClick = () => {
-      const randomIndex = getRandomNumber(10, testContent.length - 1);
+      const randomIndex = getRandomNumber(0, testContent.length - 1);
       const randomWordRef = wordRefs.current[randomIndex];
 
       if (randomWordRef) {
-        randomWordRef.classList.add("bg-[#4A3C31bb]");
+        randomWordRef.classList.add("bg-[#4A3C3199]");
         setTimeout(() => {
-          randomWordRef.classList.remove("bg-[#4A3C31bb]");
+          randomWordRef.classList.remove("bg-[#4A3C3199]");
         }, 1000);
       }
     };
@@ -136,7 +136,7 @@ export default function Home() {
     if (!isRunning) {
       intervalId2 = setInterval(() => {
         simulateRandomClick();
-      }, 1000);
+      }, 500);
     }
 
     return () => {
@@ -165,6 +165,10 @@ export default function Home() {
         className={`min-h-screen px-4 py-3 text-justify bg-[#FAF3E0] text-[#4A3C31] text-xl select-none cursor-pointer transition-opacity duration-100 ${
           isRunning ? "opacity-100 blur-none" : "opacity-75 blur-sm"
         }`}
+        style={{
+          fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+          lineHeight: "clamp(1.75rem, 3vw, 4rem)",
+        }}
       >
         {testContent.map((word, index) => (
           <React.Fragment key={index}>
